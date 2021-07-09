@@ -16,9 +16,10 @@ struct machine {
   int d2;
   int d3;
   int d4;
+  int d5;
 };
 
-struct machine MK1 = {0, 0, 0, 0};
+struct machine MK1 = {0, 0, 0, 0, 0};
 int size_struct = sizeof(struct machine);
 
 bool receive(machine* table)
@@ -39,6 +40,7 @@ void loop() {
   blinkLed(MK1.d2);
   blinkLed(MK1.d3);
   blinkLed(MK1.d4);
+  blinkLed(MK1.d5);
 }
 
 void blinkLed(int t) {
