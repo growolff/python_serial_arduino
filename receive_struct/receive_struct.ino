@@ -10,37 +10,39 @@
 
 // define data structure
 // check data types here https://learn.sparkfun.com/tutorials/data-types-in-arduino/defining-data-types
-struct machine {
-  // int in arduino are 2 bytes long
-  int d1;
-  int d2;
-  int d3;
-  int d4;
-  int d5;
-};
+#define numBytes 10
+union {
+  char bytes[numBytes];
+  struct {
+    // int in arduino are 2 bytes long
+    uint16_t data[5];
+  } unpacked;
+} packet;
 
-struct machine MK1 = {0, 0, 0, 0, 0};
-int size_struct = sizeof(struct machine);
-
-bool receive(machine* table)
-{
-  return (Serial.readBytes((char*)table, size_struct) == size_struct);
+void readPacket() {
+  while (Serial.available() < numBytes);
+  // do nothing and wait if serial buffer doesn't have enough bytes to read
+  Serial.readBytes(packet.bytes, numBytes);
+  // read numBytes bytes from serial buffer and store them at a
+  // union called “packet”
 }
 
 void setup() {
   Serial.begin(9600);
+  Serial.setTimeout(2000);
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
   // the very important part of the sketch
-  if(receive(&MK1)) delay(100);
+  readPacket();
 
-  blinkLed(MK1.d1);
-  blinkLed(MK1.d2);
-  blinkLed(MK1.d3);
-  blinkLed(MK1.d4);
-  blinkLed(MK1.d5);
+  blinkLed(packet.unpacked.data[0]);
+  blinkLed(packet.unpacked.data[1]);
+  blinkLed(packet.unpacked.data[2]);
+  blinkLed(packet.unpacked.data[3]);
+  blinkLed(packet.unpacked.data[4]);
+  
 }
 
 void blinkLed(int t) {
