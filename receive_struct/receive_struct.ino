@@ -1,11 +1,12 @@
 /*
- * by Gonzalo Olave
- * license CC zero universal
- * 
- * receive data structure from serial bus and blinks with function blinkLed()
- * 
- * modify for your own purposes
- * 
+   by Gonzalo Olave
+   license CC zero universal
+
+   receive data structure from serial bus and blinks with function blinkLed()
+   the echoes the bytes received
+
+   modify for your own purposes
+
 */
 
 // define data structure
@@ -42,16 +43,20 @@ void loop() {
   blinkLed(packet.unpacked.data[2]);
   blinkLed(packet.unpacked.data[3]);
   blinkLed(packet.unpacked.data[4]);
-  
+
+  for (int i = 0; i < numBytes; i++) {
+    Serial.write(packet.bytes[i]);
+  }
+  Serial.flush();
 }
 
 void blinkLed(int t) {
   digitalWrite(13, HIGH);
-  delay(t/2);
+  delay(t / 2);
   digitalWrite(13, LOW);
-  delay(t/2);
+  delay(t / 2);
   digitalWrite(13, HIGH);
-  delay(t/2);
+  delay(t / 2);
   digitalWrite(13, LOW);
-  delay(t/2);
+  delay(t / 2);
 }

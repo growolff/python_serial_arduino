@@ -18,7 +18,7 @@ class MachineCmd(object):
         self.d4 = 0
         self.d5 = 0
 
-    def get_packet_hex(self, data):
+    def get_packet_hex(self):
         return self.packet.hex()
 
     def get_packet():
