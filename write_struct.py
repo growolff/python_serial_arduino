@@ -6,7 +6,7 @@ from MachineCmd import MachineCmd
 
 if __name__ == '__main__':
 
-    port = input("arduino serial port: ")
+    port = input("arduino serial port: ") # COM4 windows, /dev/ttyUSB0 or /dev/ttyUSB0 linux
     arduino = serial.Serial(port, 9600)
     machine = MachineCmd()
     while True:
@@ -19,10 +19,15 @@ if __name__ == '__main__':
         machine.serialize()
 
         # See what is in packet
-        print('sending to arduino...')
+        print('sending to arduino...' + machine.get_packet_hex())
         #print(machine.packet.hex())
         # send bytes to arduino
         if arduino.write(machine.packet):
             print('OK')
+            try:
+                packet = arduino.read(10)
+                print("original packet: ", packet.hex())
+            except serial.SerialException as e:
+                print(e)
         else:
             print('fail')
